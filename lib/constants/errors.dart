@@ -1,0 +1,1 @@
+class CantSetPomodoroNumberError extends Error {}
