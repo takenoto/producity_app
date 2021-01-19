@@ -6,7 +6,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Theme.of(context).backgroundColor,
       body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: () {
             debugPrint('TAP! @ ${this.runtimeType}');
             Navigator.of(context).push(

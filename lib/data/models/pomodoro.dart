@@ -15,7 +15,12 @@ class PomodoroBasis {
 class Pomodoro extends PomodoroBasis {
   final PomoType type;
   Pomodoro({@required this.type, @required Duration totalDuration})
-      : super(totalDuration);
+      : assert(totalDuration.inSeconds > 0),
+        super(totalDuration);
+
+  double get percentCompleted =>
+      super.completedDuration.inSeconds.toDouble() /
+      super.duration.inSeconds.roundToDouble();
 
   @override
   Duration get completedDuration => super.completedDuration;

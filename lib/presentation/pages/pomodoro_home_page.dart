@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:producity_app/business_logic/pomodoro_session_notifier.dart';
 import 'package:producity_app/constants/dimensions.dart';
 import 'package:producity_app/data/models/pomodoro.dart';
 import 'package:producity_app/data/models/pomodoro_session.dart';
+import 'package:producity_app/presentation/screens/pomodoro_running_screen.dart';
 import 'package:producity_app/presentation/screens/pomodoro_session_selector_screen.dart';
 import 'package:producity_app/presentation/widgets/pomodoro_card.dart';
+import 'package:provider/provider.dart';
 
 class PomodoroHomePage extends StatelessWidget {
   @override
@@ -24,6 +27,7 @@ class PomodoroHomePage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(kPadding),
                   child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
                       debugPrint('TAP! @ ${this.runtimeType}');
                       Navigator.of(context).push(MaterialPageRoute(
@@ -34,25 +38,9 @@ class PomodoroHomePage extends StatelessWidget {
                       ignoring: true,
                       child: PomodoroCard(
                         colorIsHighlight: true,
-                        pomodoroSession: PomodoroSession(
-                            name: 'Pomodoro Clássico',
-                            pomodoros: [
-                              Pomodoro(
-                                  type: PomoType.work,
-                                  totalDuration: Duration(minutes: 25)),
-                              Pomodoro(
-                                  type: PomoType.rest,
-                                  totalDuration: Duration(minutes: 5)),
-                              Pomodoro(
-                                  type: PomoType.work,
-                                  totalDuration: Duration(minutes: 25)),
-                              Pomodoro(
-                                  type: PomoType.rest,
-                                  totalDuration: Duration(minutes: 5)),
-                              Pomodoro(
-                                  type: PomoType.bigRest,
-                                  totalDuration: Duration(minutes: 25)),
-                            ]),
+                        pomodoroSession:
+                            Provider.of<PomodoroSessionNotifier>(context)
+                                .pomodoroSession,
                       ),
                     ),
                   ),
