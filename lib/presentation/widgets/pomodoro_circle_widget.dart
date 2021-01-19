@@ -1,14 +1,18 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:producity_app/business_logic/pomodoro_session_notifier.dart';
 import 'package:producity_app/constants/colors.dart';
 import 'package:producity_app/constants/dimensions.dart';
 import 'package:producity_app/data/models/pomodoro.dart';
 import 'package:provider/provider.dart';
-import 'dart:math' as math;
+
+import '../../business_logic/pomodoro_session_notifier.dart';
 
 class PomodoroCircleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final TextStyle textStyle = Theme.of(context).textTheme.headline2;
     Pomodoro currentPomo =
         Provider.of<PomodoroSessionNotifier>(context, listen: false)
             .pomodoroSession
@@ -21,22 +25,42 @@ class PomodoroCircleWidget extends StatelessWidget {
       child: Stack(children: [
         Align(
           alignment: Alignment.center,
-          child: CustomPaint(
-            painter: CirclePainter(
-              radius: circleRadius,
-              percentCompletion: currentPomo.percentCompleted,
-              progressColor:
-                  currentPomo.type == PomoType.rest ? kRestColor : kWorkColor,
-            ),
-            child: SizedBox(
-              height: circleRadius * 2,
-              width: circleRadius * 2,
+          child: Selector<PomodoroSessionNotifier, double>(
+            selector: (_, pomoNotifier) =>
+                pomoNotifier.pomodoroSession.currentPomodoro.percentCompleted,
+            builder: (_, percentCompleted, child) => CustomPaint(
+              painter: CirclePainter(
+                radius: circleRadius,
+                percentCompletion: currentPomo.percentCompleted,
+                progressColor:
+                    currentPomo.type == PomoType.rest ? kRestColor : kWorkColor,
+              ),
+              child: SizedBox(
+                height: circleRadius * 2,
+                width: circleRadius * 2,
+              ),
             ),
           ),
         ),
         Align(
           alignment: Alignment.center,
-          child: Text('AAA this is a text'),
+          child: Selector<PomodoroSessionNotifier, String>(
+            selector: (_, pomoNotifier) {
+              Duration remainingDuration = Duration(
+                  seconds: pomoNotifier
+                          .pomodoroSession.currentPomodoro.duration.inSeconds -
+                      pomoNotifier.pomodoroSession.currentPomodoro
+                          .completedDuration.inSeconds);
+              String seconds =
+                  remainingDuration.inSeconds.remainder(60).toString();
+              if (seconds == '0') seconds = '00';
+              return remainingDuration.inMinutes.toString() + ':' + seconds;
+            },
+            builder: (_, timeString, child) => Text(
+              timeString,
+              style: textStyle,
+            ),
+          ),
         )
       ]),
     );
@@ -57,6 +81,8 @@ class CirclePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    double startingAngle = -math.pi / 2;
+
     final Paint paint = Paint()
       ..color = progressColor
       ..style = PaintingStyle.stroke
@@ -102,8 +128,13 @@ class CirclePainter extends CustomPainter {
 
     // canvas.drawPath(circlePath, paint..color = progressColor);
 
-    canvas.drawArc(Offset.zero & size, -math.pi / 2, angle, false,
+    //Arco do progresso
+    canvas.drawArc(Offset.zero & size, startingAngle, angle, false,
         paint..color = progressColor);
+
+    //Círculo do meio onde começam as coisas
+    canvas.drawCircle(
+        Offset(radius, 0), kStrokeWidth, Paint()..color = paint.color);
   }
 
   @override

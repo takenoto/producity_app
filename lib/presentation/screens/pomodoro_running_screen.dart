@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:producity_app/presentation/widgets/pomodoro_circle_widget.dart';
+import 'package:producity_app/presentation/widgets/pomodoro_control_menu.dart';
 
 class PomodoroRunningScreen extends StatelessWidget {
   @override
@@ -7,7 +8,9 @@ class PomodoroRunningScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(backgroundColor: Theme.of(context).primaryColor),
       body: Center(
-        child: PomodoroCircleWidget(),
+        child: Column(
+          children: [PomodoroCircleWidget(), PomodoroControllerMenu()],
+        ),
       ),
     );
   }
