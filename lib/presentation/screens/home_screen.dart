@@ -10,7 +10,6 @@ class HomeScreen extends StatelessWidget {
       body: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
-            debugPrint('TAP! @ ${this.runtimeType}');
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => PomodoroRunningScreen()));
           },

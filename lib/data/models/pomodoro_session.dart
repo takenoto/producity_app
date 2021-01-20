@@ -23,6 +23,8 @@ class PomodoroSession {
     }
   }
 
+  int get currentPomodoroIndex => _currentPomoIndex;
+
   void nextPomodoro() {
     if (_currentPomoIndex < pomodoros.length) _currentPomoIndex++;
   }

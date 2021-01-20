@@ -7,8 +7,6 @@ import 'package:producity_app/constants/dimensions.dart';
 import 'package:producity_app/data/models/pomodoro.dart';
 import 'package:provider/provider.dart';
 
-import '../../business_logic/pomodoro_session_notifier.dart';
-
 class PomodoroCircleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -19,6 +17,7 @@ class PomodoroCircleWidget extends StatelessWidget {
             .currentPomodoro;
     double size = MediaQuery.of(context).size.width.toDouble();
     double circleRadius = size / 2.75;
+    double boxDimensions = circleRadius * 2;
     return SizedBox(
       height: size,
       width: size,
@@ -36,8 +35,8 @@ class PomodoroCircleWidget extends StatelessWidget {
                     currentPomo.type == PomoType.rest ? kRestColor : kWorkColor,
               ),
               child: SizedBox(
-                height: circleRadius * 2,
-                width: circleRadius * 2,
+                height: boxDimensions,
+                width: boxDimensions,
               ),
             ),
           ),
@@ -56,9 +55,16 @@ class PomodoroCircleWidget extends StatelessWidget {
               if (seconds == '0') seconds = '00';
               return remainingDuration.inMinutes.toString() + ':' + seconds;
             },
-            builder: (_, timeString, child) => Text(
-              timeString,
-              style: textStyle,
+            builder: (_, timeString, child) => SizedBox(
+              width: boxDimensions * .75,
+              height: boxDimensions * .75,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Text(
+                  timeString,
+                  style: textStyle,
+                ),
+              ),
             ),
           ),
         )
@@ -87,14 +93,13 @@ class CirclePainter extends CustomPainter {
       ..color = progressColor
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = kStrokeWidth;
+      ..strokeWidth = kTimerStrokeWidth;
 
     //Círculo do fundo
     canvas.drawCircle(
-        Offset(radius, radius), radius, paint..color = kLightColorShade2);
+        Offset(radius, radius), radius, paint..color = kLightColorShade3);
 
     double angle = 360 * percentCompletion * math.pi / 180;
-    bool angleGreaterThan180 = angle > math.pi;
 
     //Arco do progresso
     canvas.drawArc(Offset.zero & size, startingAngle, angle, false,
@@ -102,7 +107,7 @@ class CirclePainter extends CustomPainter {
 
     //Círculo do meio onde começam as coisas
     canvas.drawCircle(
-        Offset(radius, 0), kStrokeWidth, Paint()..color = paint.color);
+        Offset(radius, 0), kTimerStrokeWidth, Paint()..color = paint.color);
   }
 
   @override

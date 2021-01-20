@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:producity_app/business_logic/pomodoro_session_notifier.dart';
 import 'package:producity_app/constants/dimensions.dart';
-import 'package:producity_app/data/models/pomodoro.dart';
-import 'package:producity_app/data/models/pomodoro_session.dart';
-import 'package:producity_app/presentation/screens/pomodoro_running_screen.dart';
 import 'package:producity_app/presentation/screens/pomodoro_session_selector_screen.dart';
 import 'package:producity_app/presentation/widgets/pomodoro_card.dart';
 import 'package:provider/provider.dart';
