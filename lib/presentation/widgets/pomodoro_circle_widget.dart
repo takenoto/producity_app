@@ -92,41 +92,9 @@ class CirclePainter extends CustomPainter {
     //Círculo do fundo
     canvas.drawCircle(
         Offset(radius, radius), radius, paint..color = kLightColorShade2);
-    //Círculo que representa o progresso
-    // canvas.drawCircle(
-    //     Offset(radius, radius), radius, paint..color = progressColor);
 
     double angle = 360 * percentCompletion * math.pi / 180;
     bool angleGreaterThan180 = angle > math.pi;
-
-    // double x =
-    //     math.sqrt((math.pow(radius, 2) / (1 + (math.pow(math.cos(angle), 2)))));
-    // print('r = $radius');
-    // print('sin = ${math.sin(angle)}');
-
-    // if (angleGreaterThan180) x = -x;
-
-    // double y = angleGreaterThan180
-    //     ? math.sqrt((math.pow(radius, 2) - (math.pow(x, 2))))
-    //     : math.sqrt((math.pow(radius, 2) - (math.pow(x, 2)))) - radius;
-
-    // debugPrint('x = $x, y = $y');
-
-    // Path circlePath = Path()
-    //   ..moveTo(radius, 0)
-    //   ..relativeArcToPoint(
-    //     Offset(x, y + radius),
-    //     radius: Radius.circular(radius),
-    //     largeArc: angleGreaterThan180 ? true : false,
-    //   );
-
-    // // Path completeCircle = Path()
-    // //   ..addOval(Rect.fromCenter(
-    // //       height: radius * 2,
-    // //       width: radius * 2,
-    // //       center: Offset(radius, radius)));
-
-    // canvas.drawPath(circlePath, paint..color = progressColor);
 
     //Arco do progresso
     canvas.drawArc(Offset.zero & size, startingAngle, angle, false,
