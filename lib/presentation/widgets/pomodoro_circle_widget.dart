@@ -28,9 +28,6 @@ class PomodoroCircleWidget extends StatelessWidget {
               selector: (_, pomoNotifier) =>
                   pomoNotifier.pomodoroSession.currentPomodoro.percentCompleted,
               builder: (_, percentCompleted, child) {
-                //FIXME o círculo tá atualizando muito lentamente, parece que engasga
-                print('@${this.runtimeType}');
-                print('percentCompleted: $percentCompleted');
                 return CustomPaint(
                   painter: CirclePainter(
                     radius: circleRadius,
