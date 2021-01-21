@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:producity_app/data/models/pomodoro_session.dart';
 
-enum PomodoroSessionStatus { inProgress, finished }
+enum PomodoroSessionStatus { inProgress, paused, finished }
 
 class PomodoroSessionNotifier extends ChangeNotifier {
   PomodoroSession _pomodoroSession;
@@ -24,8 +24,22 @@ class PomodoroSessionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void pauseSession() {
+    _pomodoroSessionStatus = PomodoroSessionStatus.paused;
+    notifyListeners();
+  }
+
+  void resumeSession() {
+    _pomodoroSessionStatus = PomodoroSessionStatus.inProgress;
+    notifyListeners();
+  }
+
   void nextPomo() {
-    _pomodoroSession.nextPomodoro();
+    if (_pomodoroSession.currentPomodoroIndex >=
+        _pomodoroSession.pomodoros.length - 1) {
+      _pomodoroSessionStatus = PomodoroSessionStatus.finished;
+    } else
+      _pomodoroSession.nextPomodoro();
     notifyListeners();
   }
 
@@ -34,11 +48,14 @@ class PomodoroSessionNotifier extends ChangeNotifier {
         _pomodoroSession.currentPomodoro.completedDuration.inMilliseconds +
             addedDuration.inMilliseconds;
     if (newDuration >=
-        _pomodoroSession.currentPomodoro.completedDuration.inMilliseconds) {
+        _pomodoroSession.currentPomodoro.totalDuration.inMilliseconds) {
       newDuration =
           _pomodoroSession.currentPomodoro.completedDuration.inMilliseconds;
+      _pomodoroSession.currentPomodoro.setFinished();
       nextPomo();
-    }
+    } else
+      _pomodoroSession.currentPomodoro.completedDuration =
+          Duration(milliseconds: newDuration);
     notifyListeners();
   }
 }

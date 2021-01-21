@@ -15,7 +15,6 @@ class PomodoroSessionProgressBar extends StatelessWidget {
             pomoSessionNotifier.pomodoroSession.currentPomodoroIndex,
         builder: (_, currentIndex, child) {
           children?.clear;
-          //TODO criar as children baseando no index atual
           List<Pomodoro> pomodoros =
               Provider.of<PomodoroSessionNotifier>(context, listen: false)
                   .pomodoroSession
@@ -25,8 +24,8 @@ class PomodoroSessionProgressBar extends StatelessWidget {
               //decide se roxo ou verde
               children?.add(_PomodoroSessionBarChild(
                   pomodoros[i].type == PomoType.work
-                      ? kWorkColorBright
-                      : kRestColorBright));
+                      ? kWorkColor
+                      : kRestColor));
             } else {
               children?.add(_PomodoroSessionBarChild(kLightColorShade3));
             }

@@ -3,12 +3,12 @@ import 'package:meta/meta.dart';
 enum PomoType { work, rest, bigRest, none }
 
 class PomodoroBasis {
-  final Duration duration;
+  final Duration totalDuration;
   Duration completedDuration = Duration(seconds: 0);
-  PomodoroBasis(this.duration);
+  PomodoroBasis(this.totalDuration);
 
   void setFinished() {
-    completedDuration = Duration(milliseconds: duration.inMilliseconds);
+    completedDuration = Duration(milliseconds: totalDuration.inMilliseconds);
   }
 }
 
@@ -19,8 +19,8 @@ class Pomodoro extends PomodoroBasis {
         super(totalDuration);
 
   double get percentCompleted =>
-      super.completedDuration.inSeconds.toDouble() /
-      super.duration.inSeconds.roundToDouble();
+      super.completedDuration.inMilliseconds.toDouble() /
+      super.totalDuration.inMilliseconds.roundToDouble();
 
   @override
   Duration get completedDuration => super.completedDuration;
