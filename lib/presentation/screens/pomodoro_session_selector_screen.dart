@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PomodoroSessionSelectorScreen extends StatelessWidget {
+  static const String RouteName = 'POMODOROSESSIONSELECTORSCREEN';
   @override
   Widget build(BuildContext context) {
     return Scaffold(

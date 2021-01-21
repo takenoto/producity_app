@@ -3,6 +3,7 @@ import 'package:producity_app/business_logic/pomodoro_session_notifier.dart';
 import 'package:producity_app/constants/colors.dart';
 import 'package:producity_app/data/models/pomodoro_session.dart';
 import 'package:producity_app/presentation/screens/home_screen.dart';
+import 'package:producity_app/route_generator.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -26,6 +27,8 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: kLightColorShade,
         ),
         home: HomeScreen(),
+        initialRoute: HomeScreen.RouteName,
+        onGenerateRoute: RouteGenerator.generateRoute,
       ),
     );
   }

@@ -27,9 +27,8 @@ class PomodoroHomePage extends StatelessWidget {
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       debugPrint('TAP! @ ${this.runtimeType}');
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => PomodoroSessionSelectorScreen(),
-                      ));
+                      Navigator.of(context)
+                          .pushNamed(PomodoroSessionSelectorScreen.RouteName);
                     },
                     child: IgnorePointer(
                       ignoring: true,
