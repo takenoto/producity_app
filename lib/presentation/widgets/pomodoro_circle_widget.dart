@@ -25,35 +25,47 @@ class PomodoroCircleWidget extends StatelessWidget {
         Align(
           alignment: Alignment.center,
           child: Selector<PomodoroSessionNotifier, double>(
-            selector: (_, pomoNotifier) =>
-                pomoNotifier.pomodoroSession.currentPomodoro.percentCompleted,
-            builder: (_, percentCompleted, child) => CustomPaint(
-              painter: CirclePainter(
-                radius: circleRadius,
-                percentCompletion: currentPomo.percentCompleted,
-                progressColor:
-                    currentPomo.type == PomoType.rest ? kRestColor : kWorkColor,
-              ),
-              child: SizedBox(
-                height: boxDimensions,
-                width: boxDimensions,
-              ),
-            ),
-          ),
+              selector: (_, pomoNotifier) =>
+                  pomoNotifier.pomodoroSession.currentPomodoro.percentCompleted,
+              builder: (_, percentCompleted, child) {
+                //FIXME o círculo tá atualizando muito lentamente, parece que engasga
+                print('@${this.runtimeType}');
+                print('percentCompleted: $percentCompleted');
+                return CustomPaint(
+                  painter: CirclePainter(
+                    radius: circleRadius,
+                    percentCompletion: percentCompleted,
+                    progressColor: currentPomo.type == PomoType.rest
+                        ? kRestColor
+                        : kWorkColor,
+                  ),
+                  child: SizedBox(
+                    height: boxDimensions,
+                    width: boxDimensions,
+                    // child: Text(percentCompleted.toString()),
+                  ),
+                );
+              }),
         ),
         Align(
           alignment: Alignment.center,
           child: Selector<PomodoroSessionNotifier, String>(
             selector: (_, pomoNotifier) {
               Duration remainingDuration = Duration(
-                  seconds: pomoNotifier
-                          .pomodoroSession.currentPomodoro.duration.inSeconds -
+                  seconds: pomoNotifier.pomodoroSession.currentPomodoro
+                          .totalDuration.inSeconds -
                       pomoNotifier.pomodoroSession.currentPomodoro
                           .completedDuration.inSeconds);
-              String seconds =
-                  remainingDuration.inSeconds.remainder(60).toString();
-              if (seconds == '0') seconds = '00';
-              return remainingDuration.inMinutes.toString() + ':' + seconds;
+              int seconds = remainingDuration.inSeconds.remainder(60);
+              String secondsString;
+              if (seconds <= 9) {
+                secondsString = '0$seconds';
+              } else
+                secondsString = seconds.toString();
+
+              return remainingDuration.inMinutes.toString() +
+                  ':' +
+                  secondsString;
             },
             builder: (_, timeString, child) => SizedBox(
               width: boxDimensions * .75,
@@ -111,7 +123,7 @@ class CirclePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+  bool shouldRepaint(CirclePainter oldDelegate) {
+    return oldDelegate.percentCompletion != this.percentCompletion;
   }
 }

@@ -3,6 +3,7 @@ import 'package:producity_app/business_logic/pomodoro_session_notifier.dart';
 import 'package:producity_app/constants/colors.dart';
 import 'package:producity_app/constants/dimensions.dart';
 import 'package:producity_app/data/models/pomodoro.dart';
+import 'package:producity_app/notifications/pomodoro_control_notification.dart';
 import 'package:provider/provider.dart';
 
 class PomodoroControllerMenu extends StatelessWidget {
@@ -16,7 +17,7 @@ class PomodoroControllerMenu extends StatelessWidget {
       this.checkFunction,
       this.stopFunction});
 
-//TODO PASSAR CADA MÉTODO PARA SEU WIDGET
+//TODO DESPACHAR NOTIFICATIONS
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +41,15 @@ class PomodoroControllerMenu extends StatelessWidget {
                   Icons.check,
                   color: color,
                 ),
-                onPressed: () {}),
+                onPressed: () {
+                  PomodoroCheckNotification().dispatch(context);
+                }),
             _PlayAndPauseButton(),
-            IconButton(icon: Icon(Icons.stop, color: color), onPressed: () {}),
+            IconButton(
+                icon: Icon(Icons.stop, color: color),
+                onPressed: () {
+                  PomodoroEndSessionNotification().dispatch(context);
+                }),
           ],
         );
       },
@@ -65,20 +72,32 @@ class __PlayAndPauseButtonState extends State<_PlayAndPauseButton> {
             .currentPomodoro
             .type;
     Color color = pomoType == PomoType.work ? kWorkColor : kRestColor;
-    //TODO: Fazer ele trocar de play para pause e vice-versa quando for pressionado
-    return FlatButton(
-      padding: EdgeInsets.all(kPadding),
-      child: Icon(
-        Icons.play_arrow,
-        size: IconTheme.of(context).size * 1.25,
-        color: color,
-      ),
-      onPressed: () {},
-      shape: CircleBorder(
-          side: BorderSide(
-        width: kButtonStrokeWidth,
-        color: color,
-      )),
+    return Selector<PomodoroSessionNotifier, bool>(
+      selector: (_, sessionNotifier) =>
+          sessionNotifier.pomodoroSessionStatus ==
+          PomodoroSessionStatus.inProgress,
+      builder: (_, inProgress, child) {
+        return FlatButton(
+          padding: const EdgeInsets.all(kPadding),
+          child: Icon(
+            inProgress ? Icons.pause : Icons.play_arrow,
+            size: IconTheme.of(context).size * 1.25,
+            color: inProgress ? color : kLightColor,
+          ),
+          onPressed: () {
+            inProgress
+                ? PomodoroPauseNotification().dispatch(context)
+                : PomodoroResumeNotification().dispatch(context);
+          },
+          shape: CircleBorder(
+            side: BorderSide(
+              width: kButtonStrokeWidth,
+              color: color,
+            ),
+          ),
+          color: inProgress ? Colors.transparent : color,
+        );
+      },
     );
   }
 }
