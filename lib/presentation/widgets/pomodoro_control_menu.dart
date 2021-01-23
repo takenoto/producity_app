@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:producity_app/business_logic/pomodoro_session_notifier.dart';
 import 'package:producity_app/constants/colors.dart';
 import 'package:producity_app/constants/dimensions.dart';
+import 'package:producity_app/constants/widget_ids.dart';
 import 'package:producity_app/data/models/pomodoro.dart';
 import 'package:producity_app/notifications/pomodoro_control_notification.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +38,7 @@ class PomodoroControllerMenu extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
+                key: Key(kPomodoroControllerCheckSkip),
                 icon: Icon(
                   Icons.check,
                   color: color,
@@ -46,6 +48,7 @@ class PomodoroControllerMenu extends StatelessWidget {
                 }),
             _PlayAndPauseButton(),
             IconButton(
+                key: Key(kPomodoroControllerStopEndSession),
                 icon: Icon(Icons.stop, color: color),
                 onPressed: () {
                   PomodoroEndSessionNotification().dispatch(context);
@@ -59,6 +62,7 @@ class PomodoroControllerMenu extends StatelessWidget {
 
 ///Não precisa dar rebuild quando alterar a cor porque o widget pai já fará isso
 class _PlayAndPauseButton extends StatefulWidget {
+  _PlayAndPauseButton() : super(key: Key(kPomodoroControllerPlayPause));
   @override
   __PlayAndPauseButtonState createState() => __PlayAndPauseButtonState();
 }
